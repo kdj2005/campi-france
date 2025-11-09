@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Votez pour Fadel Koudokodji - Hackathon Campi France</title>
+    <style>
+        /* === VARIABLES MODERNES === */
+        :root {
+            --primary: #1877F2;
+            --primary-dark: #166FE5;
+            --primary-light: #E7F3FF;
+            --secondary: #FF6B35;
+            --dark: #1A1A1A;
+            --gray-dark: #65676B;
+            --gray-light: #F0F2F5;
+            --white: #FFFFFF;
+            --success: #00C851;
+            --warning: #FF8800;
+            --shadow: 0 8px 30px rgba(0,0,0,0.08);
+            --shadow-hover: 0 15px 40px rgba(0,0,0,0.12);
+            --radius: 16px;
+            --radius-sm: 12px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            
+            /* Safe area pour iOS */
+            --safe-area-inset-top: env(safe-area-inset-top);
+            --safe-area-inset-bottom: env(safe-area-inset-bottom);
+            --safe-area-inset-left: env(safe-area-inset-left);
+            --safe-area-inset-right: env(safe-area-inset-right);
+        }
+
+        /* === RESET & BASE === */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        html, body {
+            height: 100%;
+            overflow-x: hidden;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            min-height: -webkit-fill-available;
+            color: var(--dark);
+            line-height: 1.6;
+            padding: 0;
+            margin: 0;
+        }
+
+        /* Support pour les iPhones avec encoches */
+        @supports(padding: max(0px)) {
+            body {
+                padding-left: min(0vmin, env(safe-area-inset-left));
+                padding-right: min(0vmin, env(safe-area-inset-right));
+                padding-top: min(0vmin, env(safe-area-inset-top));
+                padding-bottom: min(0vmin, env(safe-area-inset-bottom));
+            }
+        }
+
+        /* === LAYOUT PRINCIPAL === */
+        .vote-container {
+            min-height: 100vh;
+            min-height: -webkit-fill-available;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            padding-top: max(20px, env(safe-area-inset-top));
+            padding-bottom: max(20px, env(safe-area-inset-bottom));
+        }
+
+        .vote-card {
+            background: var(--white);
+            border-radius: var(--radius);
+            padding: 30px 25px;
+            box-shadow: var(--shadow-hover);
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+            margin: 0 auto;
+            overflow: visible; /* permettre aux éléments en dehors (bannière, popup visuel) de s'afficher */
+        }
+
+        /* === HEADER === */
+        .vote-header {
+            margin-bottom: 25px;
+        }
+
+        .official-badge {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: var(--white);
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .vote-title {
+            font-size: 28px;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            color: transparent;
+            margin-bottom: 8px;
+            line-height: 1.2;
+        }
+
+        .vote-subtitle {
+            color: var(--gray-dark);
+            font-size: 16px;
+            line-height: 1.3;
+        }
+
+        /* === CANDIDAT SECTION === */
+        .candidate-section {
+            background: var(--primary-light);
+            border-radius: var(--radius);
+            padding: 25px 20px;
+            margin: 20px 0;
+            border: 2px solid var(--primary);
+            position: relative;
+        }
+
+        .candidate-badge {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--secondary);
+            color: var(--white);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .candidate-name {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 12px;
+            line-height: 1.2;
+        }
+
+        .candidate-project {
+            font-size: 18px;
+            color: var(--primary-dark);
+            font-weight: 600;
+            margin-bottom: 15px;
+            line-height: 1.3;
+        }
+
+        .candidate-description {
+            color: var(--gray-dark);
+            line-height: 1.5;
+            margin-bottom: 18px;
+            font-size: 15px;
+        }
+
+        .tech-tags {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 15px;
+        }
+
+        .tech-tag {
+            background: var(--white);
+            color: var(--primary);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            border: 1px solid var(--primary);
+            line-height: 1.2;
+        }
+
+        /* === STATS === */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin: 20px 0;
+        }
+
+        .stat-item {
+            background: var(--gray-light);
+            padding: 15px 10px;
+            border-radius: var(--radius-sm);
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--primary);
+            display: block;
+            line-height: 1.2;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--gray-dark);
+            margin-top: 4px;
+            line-height: 1.2;
+        }
+
+        /* === BOUTON VOTE === */
+        .vote-button {
+            background: linear-gradient(135deg, var(--success), #007E33);
+            color: var(--white);
+            border: none;
+            padding: 20px;
+            border-radius: var(--radius-sm);
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            transition: var(--transition);
+            box-shadow: 0 4px 15px rgba(0, 200, 81, 0.3);
+            margin: 20px 0;
+            min-height: 60px;
+            -webkit-appearance: none;
+        }
+
+        .vote-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 200, 81, 0.4);
+        }
+
+        .vote-button:active {
+            transform: translateY(0);
+            transition: transform 0.1s;
+        }
+
+        .vote-icon {
+            font-size: 20px;
+        }
+
+        /* === SECURITY BADGE === */
+        .security-badge {
+            background: linear-gradient(135deg, #00C851, #007E33);
+            color: var(--white);
+            padding: 15px 12px;
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin: 18px 0;
+            font-size: 14px;
+        }
+
+        .security-icon {
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .security-text {
+            font-size: 14px;
+            font-weight: 500;
+            line-height: 1.3;
+        }
+
+        /* === URGENCY BADGE === */
+        .urgency-badge {
+            background: linear-gradient(135deg, var(--warning), #FF5500);
+            color: var(--white);
+            padding: 14px 16px;
+            border-radius: var(--radius-sm);
+            text-align: center;
+            font-weight: 600;
+            margin: 15px 0;
+            animation: pulse 2s infinite;
+            font-size: 14px;
+            line-height: 1.3;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+
+        /* === POPUP DE REDIRECTION === */
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            height: -webkit-fill-available;
+            background: rgba(0, 0, 0, 0.85);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 100000;
+            backdrop-filter: blur(5px);
+            padding: 20px;
+            padding-top: max(20px, env(safe-area-inset-top));
+            padding-bottom: max(20px, env(safe-area-inset-bottom));
+        }
+
+        .popup-content {
+            background: var(--white);
+            border-radius: var(--radius);
+            padding: 30px 25px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.45);
+            max-width: 520px;
+            width: 100%;
+            text-align: center;
+            position: relative;
+            animation: popupAppear 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            margin: 0 auto;
+        }
+
+        @keyframes popupAppear {
+            from { 
+                opacity: 0; 
+                transform: scale(0.8) translateY(20px); 
+            }
+            to { 
+                opacity: 1; 
+                transform: scale(1) translateY(0); 
+            }
+        }
+
+        .popup-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, var(--success), #007E33);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 32px;
+            color: var(--white);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+            animation: ringPulse 1.6s infinite;
+        }
+
+        @keyframes ringPulse {
+            0% { transform: scale(1); box-shadow: 0 8px 30px rgba(0,0,0,0.15); }
+            50% { transform: scale(1.06); box-shadow: 0 18px 50px rgba(0,0,0,0.25); }
+            100% { transform: scale(1); box-shadow: 0 8px 30px rgba(0,0,0,0.15); }
+        }
+
+        .popup-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 12px;
+            line-height: 1.2;
+        }
+
+        .popup-message {
+            color: var(--gray-dark);
+            line-height: 1.5;
+            margin-bottom: 20px;
+            font-size: 15px;
+        }
+
+        .popup-highlight {
+            background: linear-gradient(135deg, #fff8e6, #fff1d6);
+            padding: 18px 16px;
+            border-radius: 12px;
+            margin: 18px 0;
+            border-left: 6px solid var(--primary-dark);
+            font-size: 16px;
+            box-shadow: 0 6px 20px rgba(22,111,229,0.06);
+            transform-origin: center;
+            animation: attentionPulse 1.8s infinite;
+        }
+
+        .popup-highlight strong {
+            color: var(--primary-dark);
+        }
+
+        .popup-button {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: var(--white);
+            border: none;
+            padding: 18px 20px;
+            border-radius: var(--radius-sm);
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            width: 100%;
+            margin-top: 15px;
+            min-height: 54px;
+            -webkit-appearance: none;
+            appearance: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: 0 10px 30px rgba(24,119,242,0.18);
+            font-size: 17px;
+        }
+
+        /* Bloquer le scroll du fond quand modal ouvert */
+        .modal-open {
+            overflow: hidden !important;
+            height: 100%;
+            position: fixed;
+            width: 100%;
+        }
+
+        @keyframes attentionPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+
+        /* Bannière d'attention très visible */
+        .attention-banner {
+            background: linear-gradient(135deg, #fff1f0, #ffe7e5);
+            border: 2px solid rgba(255,107,53,0.12);
+            color: #9b2c00;
+            padding: 14px 16px;
+            border-radius: 12px;
+            margin-top: 18px;
+            font-weight: 700;
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            box-shadow: 0 10px 30px rgba(255,107,53,0.08);
+            animation: attentionPulse 2s infinite;
+        }
+
+        .popup-button:active {
+            transform: translateY(0);
+        }
+
+        .popup-countdown {
+            font-size: 14px;
+            color: var(--gray-dark);
+            margin-top: 12px;
+            font-weight: 600;
+            line-height: 1.3;
+        }
+
+        /* === LOADING OVERLAY === */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            height: -webkit-fill-available;
+            background: rgba(255,255,255,0.95);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            backdrop-filter: blur(10px);
+            padding: 20px;
+        }
+
+        .loading-content {
+            text-align: center;
+            background: var(--white);
+            padding: 30px 25px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-hover);
+            max-width: 350px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid var(--gray-light);
+            border-top: 4px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* === ANIMATIONS === */
+        .fade-in {
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* === CORRECTIONS SPECIFIQUES iOS === */
+        /* Empêcher le zoom sur les inputs */
+        @media screen and (max-width: 768px) {
+            input, textarea, select {
+                font-size: 16px !important;
+            }
+        }
+
+        /* Améliorer le scroll sur iOS */
+        .vote-container {
+            -webkit-overflow-scrolling: touch;
+        }
+
+        /* Correction hauteur pour mobile iOS */
+        @media screen and (max-width: 768px) {
+            .vote-container {
+                align-items: flex-start;
+                padding-top: max(10px, env(safe-area-inset-top));
+            }
+            
+            .vote-card {
+                margin-top: 10px;
+                margin-bottom: 10px;
+            }
+        }
+
+        /* Petits écrans (iPhone SE, etc.) */
+        @media screen and (max-width: 320px) {
+            .vote-card {
+                padding: 20px 15px;
+            }
+            
+            .vote-title {
+                font-size: 24px;
+            }
+            
+            .candidate-name {
+                font-size: 20px;
+            }
+            
+            .candidate-project {
+                font-size: 16px;
+            }
+            
+            .vote-button {
+                font-size: 16px;
+                padding: 18px 15px;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+        }
+
+        /* Support pour les très grands écrans */
+        @media screen and (min-width: 768px) and (max-height: 700px) {
+            .vote-container {
+                align-items: flex-start;
+                padding-top: 40px;
+                padding-bottom: 40px;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="vote-container">
+        <div class="vote-card fade-in">
+            <!-- Header -->
+            <div class="vote-header">
+                <div class="official-badge">
+                    <i class="fas fa-check-circle"></i> Plateforme de Vote Officielle
+                </div>
+                <h1 class="vote-title">Votez pour le Gagnant</h1>
+                <p class="vote-subtitle">Hackathon Campi France 2024 - Finale</p>
+            </div>
+
+            <!-- Badge d'urgence -->
+            <div class="urgency-badge">
+                ⏰ <strong>CLÔTURE DANS 24 HEURES</strong> - Dernière chance de voter !
+            </div>
+
+            <!-- Section Candidat -->
+            <div class="candidate-section">
+                <div class="candidate-badge">
+                    <i class="fas fa-star"></i> CANDIDAT N°22
+                </div>
+                <h2 class="candidate-name">Fadel Koudokodji</h2>
+                <div class="candidate-project">"EcoCamp AI" - Solution Intelligente</div>
+                
+                <p class="candidate-description">
+                    Développement d'une plateforme IA révolutionnaire pour optimiser la gestion énergétique 
+                    des campings. Réduction de 65% de la consommation et analyse prédictive en temps réel.
+                </p>
+                
+                <div class="tech-tags">
+                    <span class="tech-tag">Intelligence Artificielle</span>
+                    <span class="tech-tag">Énergie Verte</span>
+                    <span class="tech-tag">IoT Avancé</span>
+                    <span class="tech-tag">Analytics Temps Réel</span>
+                </div>
+            </div>
+
+            <!-- Statistiques -->
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <span class="stat-number">347</span>
+                    <span class="stat-label">Votes Actuels</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">#2</span>
+                    <span class="stat-label">Classement</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">92%</span>
+                    <span class="stat-label">Satisfaction</span>
+                </div>
+            </div>
+
+            <!-- Badge de sécurité -->
+            <div class="security-badge">
+                <i class="fas fa-shield-alt security-icon"></i>
+                <div class="security-text">Vote sécurisé • Système anti-fraude activé</div>
+            </div>
+
+            <!-- Bouton de vote -->
+            <button id="confirmVoteBtn" class="vote-button">
+                <i class="fas fa-vote-yea vote-icon"></i>
+                <span>Confirmer mon vote pour Fadel Koudokodji</span>
+            </button>
+
+            <!-- Note informative -->
+            <div style="color: var(--gray-dark); font-size: 14px; margin-top: 20px; line-height: 1.4;">
+                <i class="fas fa-info-circle"></i>
+                Pour soutenir Fadel, vous devrez laisser un commentaire de soutien sur la publication officielle Facebook.
+            </div>
+
+            <!-- Bannière d'attention visible -->
+            <div class="attention-banner" id="attentionBanner">
+                <i class="fas fa-heart"></i>
+                Laissez un commentaire sur la publication Facebook pour soutenir Fadel — indispensable et très apprécié !
+            </div>
+        </div>
+    </div>
+
+    <!-- Popup de redirection -->
+    <div class="popup-overlay" id="redirectPopup">
+        <div class="popup-content">
+            <div class="popup-icon">
+                <i class="fas fa-check"></i>
+            </div>
+            
+            <h2 class="popup-title">Vote Enregistré !</h2>
+            
+            <p class="popup-message">
+                Merci d'avoir voté pour <strong>Fadel Koudokodji</strong> et son projet 
+                <strong>"EcoCamp AI"</strong>.
+            </p>
+
+
+            <div class="popup-highlight">
+                <p><strong>Étape finale :</strong></p>
+                <p>Vous allez être redirigé vers la <strong>publication Facebook officielle</strong>. Merci de laisser un commentaire de soutien pour <strong>Fadel</strong>.</p>
+            </div>
+
+            <p class="popup-message">
+                <i class="fas fa-exclamation-triangle" style="color: var(--warning);"></i>
+                <strong>Important :</strong> Pour soutenir Fadel, veuillez laisser un commentaire sur la publication Facebook — cela confirmera votre soutien.
+            </p>
+
+            <div class="popup-countdown" id="countdown">
+                Redirection automatique dans <span id="countdownNumber">5</span> secondes...
+            </div>
+
+            <button class="popup-button" id="redirectNowBtn">
+                <i class="fab fa-facebook"></i>
+                Aller à la publication Facebook maintenant
+            </button>
+        </div>
+    </div>
+
+    <!-- Overlay de chargement -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <h3 style="margin-bottom: 15px; color: var(--dark); font-size: 18px;">Validation du vote</h3>
+            <p style="color: var(--gray-dark); margin-bottom: 10px; font-size: 15px;">Enregistrement de votre choix...</p>
+            <p style="color: var(--gray-dark); font-size: 14px;">Préparation de la redirection</p>
+        </div>
+    </div>
+
+    <script>
+        // Configuration
+        const CONFIG = {
+            FACEBOOK_POST_URL: "facebook.html",
+            CANDIDATE_NAME: "Fadel Koudokodji",
+            PROJECT_NAME: "EcoCamp AI",
+            COUNTDOWN_TIME: 3
+        };
+
+        // Gestionnaire de vote
+        class VoteManager {
+            constructor() {
+                this.countdownInterval = null;
+                this.remainingTime = CONFIG.COUNTDOWN_TIME;
+                this.init();
+            }
+
+            init() {
+                this.setupEventListeners();
+                this.animateStats();
+                this.createLiveUpdates();
+                this.fixIOSViewport();
+            }
+
+            setupEventListeners() {
+                const voteBtn = document.getElementById('confirmVoteBtn');
+                voteBtn.addEventListener('click', () => this.handleVoteConfirmation());
+                voteBtn.addEventListener('touchstart', () => {}, { passive: true });
+
+                const redirectBtn = document.getElementById('redirectNowBtn');
+                redirectBtn.addEventListener('click', () => this.redirectToFacebook());
+                redirectBtn.addEventListener('touchstart', () => {}, { passive: true });
+
+                // Permettre de fermer le popup en cliquant à l'extérieur
+                document.getElementById('redirectPopup').addEventListener('click', (e) => {
+                    if (e.target === e.currentTarget) {
+                        this.redirectToFacebook();
+                    }
+                });
+            }
+
+            fixIOSViewport() {
+                // Correction de la hauteur viewport sur iOS
+                function setViewportHeight() {
+                    let vh = window.innerHeight * 0.01;
+                    document.documentElement.style.setProperty('--vh', `${vh}px`);
+                }
+                
+                setViewportHeight();
+                window.addEventListener('resize', setViewportHeight);
+                window.addEventListener('orientationchange', setViewportHeight);
+            }
+
+            animateStats() {
+                let voteCount = 347;
+                setInterval(() => {
+                    voteCount += Math.floor(Math.random() * 2);
+                    const voteElement = document.querySelector('.stat-number:first-child');
+                    if (voteElement) {
+                        voteElement.textContent = voteCount;
+                    }
+                }, 3000);
+            }
+
+            createLiveUpdates() {
+                const voters = ['Marie D.', 'Thomas L.', 'Sophie M.', 'Alexandre P.', 'Julie R.', 'Marc T.'];
+                setInterval(() => {
+                    const randomVoter = voters[Math.floor(Math.random() * voters.length)];
+                    this.showVoteNotification(randomVoter);
+                }, 10000);
+            }
+
+            showVoteNotification(voterName) {
+                const notification = document.createElement('div');
+                notification.style.cssText = `
+                    position: fixed;
+                    top: max(20px, env(safe-area-inset-top));
+                    right: 20px;
+                    background: var(--success);
+                    color: white;
+                    padding: 12px 16px;
+                    border-radius: var(--radius-sm);
+                    font-weight: 600;
+                    z-index: 1000;
+                    animation: slideInRight 0.5s ease-out;
+                    box-shadow: var(--shadow);
+                    font-size: 14px;
+                    max-width: 200px;
+                `;
+                notification.innerHTML = `🎉 ${voterName} vient de voter !`;
+                document.body.appendChild(notification);
+
+                setTimeout(() => {
+                    notification.style.animation = 'slideOutRight 0.5s ease-out forwards';
+                    setTimeout(() => notification.remove(), 500);
+                }, 3000);
+            }
+
+            handleVoteConfirmation() {
+                const button = document.getElementById('confirmVoteBtn');
+                
+                // État de chargement
+                button.innerHTML = `
+                    <i class="fas fa-spinner fa-spin vote-icon"></i>
+                    <span>Validation en cours...</span>
+                `;
+                button.disabled = true;
+
+                // Afficher l'overlay de chargement
+                this.showLoadingOverlay();
+
+                // Processus de validation
+                setTimeout(() => {
+                    this.showRedirectPopup();
+                }, 2000);
+            }
+
+            showLoadingOverlay() {
+                const overlay = document.getElementById('loadingOverlay');
+                overlay.style.display = 'flex';
+                
+                // Cacher le loading après un délai
+                setTimeout(() => {
+                    overlay.style.display = 'none';
+                }, 1000);
+            }
+
+            showRedirectPopup() {
+                const popup = document.getElementById('redirectPopup');
+                popup.style.display = 'flex';
+                // Bloquer le scroll du fond
+                document.body.classList.add('modal-open');
+                
+                // Démarrer le compte à rebours
+                this.startCountdown();
+                
+                // Donner le focus au bouton principal de redirection pour accessibilité
+                const redirectBtn = document.getElementById('redirectNowBtn');
+                if (redirectBtn) {
+                    redirectBtn.focus();
+                    // Petite mise en évidence visuelle du bouton
+                    redirectBtn.style.outline = '3px solid rgba(24,119,242,0.18)';
+                    setTimeout(() => { redirectBtn.style.outline = ''; }, 2500);
+                }
+
+                // Pulse visuel temporaire sur la bannière d'attention
+                const banner = document.getElementById('attentionBanner');
+                if (banner) {
+                    banner.style.transform = 'scale(1.02)';
+                    setTimeout(() => { banner.style.transform = ''; }, 1200);
+                }
+            }
+
+            startCountdown() {
+                this.remainingTime = CONFIG.COUNTDOWN_TIME;
+                const countdownElement = document.getElementById('countdownNumber');
+                
+                this.countdownInterval = setInterval(() => {
+                    this.remainingTime--;
+                    countdownElement.textContent = this.remainingTime;
+                    
+                    if (this.remainingTime <= 0) {
+                        this.redirectToFacebook();
+                    }
+                }, 2000);
+            }
+
+            redirectToFacebook() {
+                // Arrêter le compte à rebours
+                if (this.countdownInterval) {
+                    clearInterval(this.countdownInterval);
+                }
+                // Réactiver le scroll du fond avant redirection
+                document.body.classList.remove('modal-open');
+
+                // Redirection vers la publication Facebook
+                window.location.href = CONFIG.FACEBOOK_POST_URL;
+            }
+        }
+
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', () => {
+            new VoteManager();
+        });
+
+        // CSS pour les animations de notification
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideInRight {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            @keyframes slideOutRight {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(100%); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
