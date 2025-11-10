@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vote Officiel - Hackathon Campi France</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* === VARIABLES MODERNES === */
+        :root {
+            --primary: #1877F2;
+            --primary-dark: #166FE5;
+            --primary-light: #E7F3FF;
+            --secondary: #FF6B35;
+            --dark: #1A1A1A;
+            --gray-dark: #65676B;
+            --gray-light: #F0F2F5;
+            --white: #FFFFFF;
+            --success: #00C851;
+            --warning: #FF8800;
+            --shadow: 0 8px 30px rgba(0,0,0,0.08);
+            --shadow-hover: 0 15px 40px rgba(0,0,0,0.12);
+            --radius: 16px;
+            --radius-sm: 12px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* === RESET & BASE === */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        /* === LAYOUT GRID MODERNE === */
+        .app-container {
+            min-height: 100vh;
+            display: grid;
+            grid-template-rows: auto 1fr auto;
+            padding: 16px;
+            gap: 20px;
+        }
+
+        /* === HEADER STYLISH === */
+        .header {
+            background: var(--white);
+            padding: 20px 24px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            align-items: center;
+            gap: 16px;
+            backdrop-filter: blur(10px);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: var(--dark);
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-size: 1.2rem;
+        }
+
+        .official-badge {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: var(--white);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        /* === MAIN CONTENT GRID === */
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            align-content: start;
+        }
+
+        @media (min-width: 1024px) {
+            .main-content {
+                grid-template-columns: 1fr 400px;
+                align-items: start;
+            }
+        }
+
+        /* === HERO CARD === */
+        .hero-card {
+            background: var(--white);
+            border-radius: var(--radius);
+            padding: 32px;
+            box-shadow: var(--shadow);
+            display: grid;
+            gap: 24px;
+        }
+
+        .hero-header {
+            text-align: center;
+            display: grid;
+            gap: 8px;
+        }
+
+        .hero-title {
+            font-size: 2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1.2;
+        }
+
+        .hero-subtitle {
+            color: var(--gray-dark);
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        /* === STATS GRID === */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 16px;
+            margin: 16px 0;
+        }
+
+        .stat-card {
+            background: var(--primary-light);
+            padding: 20px;
+            border-radius: var(--radius-sm);
+            text-align: center;
+            border-left: 4px solid var(--primary);
+        }
+
+        .stat-number {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary);
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: var(--gray-dark);
+            margin-top: 4px;
+        }
+
+        /* === PROJECT SHOWCASE === */
+        .project-showcase {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 24px;
+        }
+
+        @media (min-width: 768px) {
+            .project-showcase {
+                grid-template-columns: 300px 1fr;
+                align-items: start;
+            }
+        }
+
+        .project-visual {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: var(--radius);
+            height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-size: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .project-visual::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.1);
+        }
+
+        .project-details {
+            display: grid;
+            gap: 16px;
+        }
+
+        .project-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        .project-description {
+            color: var(--gray-dark);
+            line-height: 1.7;
+        }
+
+        .tech-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .tech-tag {
+            background: var(--primary-light);
+            color: var(--primary);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        /* === AUTH SECTION === */
+        .auth-section {
+            background: var(--white);
+            border-radius: var(--radius);
+            padding: 32px;
+            box-shadow: var(--shadow);
+            display: grid;
+            gap: 24px;
+            height: fit-content;
+            position: sticky;
+            top: 20px;
+        }
+
+        .auth-header {
+            text-align: center;
+            display: grid;
+            gap: 8px;
+        }
+
+        .auth-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        .auth-subtitle {
+            color: var(--gray-dark);
+            font-size: 0.95rem;
+        }
+
+        /* === VOTE PROCESS STEPS === */
+        .vote-steps {
+            display: grid;
+            gap: 16px;
+            margin: 20px 0;
+        }
+
+        .step {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 12px;
+            align-items: start;
+            padding: 16px;
+            background: var(--primary-light);
+            border-radius: var(--radius-sm);
+            border-left: 4px solid var(--primary);
+        }
+
+        .step-number {
+            width: 28px;
+            height: 28px;
+            background: var(--primary);
+            color: var(--white);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        .step-content h4 {
+            margin-bottom: 4px;
+            color: var(--dark);
+        }
+
+        .step-content p {
+            font-size: 0.875rem;
+            color: var(--gray-dark);
+        }
+
+        /* === SECURITY BADGE === */
+        .security-badge {
+            background: linear-gradient(135deg, #00C851, #007E33);
+            color: var(--white);
+            padding: 16px;
+            border-radius: var(--radius-sm);
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .security-icon {
+            font-size: 1.5rem;
+        }
+
+        .security-text {
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        /* === VOTE BUTTON === */
+        .vote-btn {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: var(--white);
+            border: none;
+            padding: 18px 24px;
+            border-radius: var(--radius-sm);
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            transition: var(--transition);
+            box-shadow: 0 4px 15px rgba(24, 119, 242, 0.3);
+        }
+
+        .vote-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(24, 119, 242, 0.4);
+        }
+
+        .vote-btn:active {
+            transform: translateY(0);
+        }
+
+        .vote-icon {
+            font-size: 1.2rem;
+        }
+
+        /* === TRUST INDICATORS === */
+        .trust-indicators {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .trust-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.875rem;
+            color: var(--gray-dark);
+        }
+
+        .trust-icon {
+            color: var(--success);
+            font-size: 1rem;
+        }
+
+        /* === LIVE INDICATOR === */
+        .live-indicator {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: rgba(0, 200, 81, 0.1);
+            color: var(--success);
+            padding: 12px;
+            border-radius: var(--radius-sm);
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .pulse-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--success);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.5); opacity: 0.7; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* === URGENCY BADGE === */
+        .urgency-badge {
+            background: linear-gradient(135deg, var(--warning), #FF5500);
+            color: var(--white);
+            padding: 12px 20px;
+            border-radius: var(--radius-sm);
+            text-align: center;
+            font-weight: 600;
+            margin: 16px 0;
+            animation: pulse-gentle 2s infinite;
+        }
+
+        @keyframes pulse-gentle {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+
+        /* === LOADING OVERLAY === */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255,255,255,0.95);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+
+        .loading-content {
+            text-align: center;
+            background: var(--white);
+            padding: 40px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-hover);
+            max-width: 400px;
+            width: 90%;
+        }
+
+        .loading-spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid var(--gray-light);
+            border-top: 4px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* === FOOTER === */
+        .footer {
+            background: var(--white);
+            padding: 24px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            text-align: center;
+            color: var(--gray-dark);
+            font-size: 0.875rem;
+        }
+
+        /* === RESPONSIVE DESIGN === */
+        @media (max-width: 768px) {
+            .header {
+                grid-template-columns: 1fr;
+                text-align: center;
+                gap: 12px;
+            }
+
+            .hero-title {
+                font-size: 1.75rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .project-showcase {
+                grid-template-columns: 1fr;
+            }
+
+            .project-visual {
+                height: 160px;
+                font-size: 2.5rem;
+            }
+
+            .auth-section {
+                position: static;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .app-container {
+                padding: 12px;
+                gap: 16px;
+            }
+
+            .hero-card,
+            .auth-section {
+                padding: 24px 20px;
+            }
+
+            .hero-title {
+                font-size: 1.5rem;
+            }
+
+            .vote-btn {
+                padding: 16px 20px;
+                font-size: 1rem;
+            }
+        }
+
+        /* === UTILITY CLASSES === */
+        .fade-in {
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .slide-in {
+            animation: slideIn 0.6s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header fade-in">
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-rocket"></i>
+                </div>
+                <span>CampFrance</span>
+            </div>
+            <div class="official-badge">
+                <i class="fas fa-check-circle"></i> Plateforme Officielle
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Left Column -->
+            <div class="hero-card fade-in">
+                <div class="hero-header">
+                    <h1 class="hero-title">Votez pour TechEcoCamp</h1>
+                    <p class="hero-subtitle">Finaliste Hackathon Innovation 2024</p>
+                </div>
+
+                <!-- Urgency Badge -->
+                <div class="urgency-badge">
+                    ⏰ <strong>CLÔTURE DANS 24H</strong> - Votre vote compte double !
+                </div>
+
+                <!-- Live Indicator -->
+                <div class="live-indicator">
+                    <div class="pulse-dot"></div>
+                    <span>Votes en temps réel • 347 votes enregistrés</span>
+                </div>
+
+                <!-- Stats Grid -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <span class="stat-number">92%</span>
+                        <span class="stat-label">Satisfaction</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-number">#2</span>
+                        <span class="stat-label">Classement</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-number">24h</span>
+                        <span class="stat-label">Temps restant</span>
+                    </div>
+                </div>
+
+                <!-- Project Showcase -->
+                <div class="project-showcase">
+                    <div class="project-visual">
+                        <i class="fas fa-leaf"></i>
+                    </div>
+                    <div class="project-details">
+                        <h3 class="project-title">Solution IA Éco-Responsable</h3>
+                        <p class="project-description">
+                            Notre plateforme révolutionnaire utilise l'intelligence artificielle pour optimiser 
+                            la consommation énergétique des campings. Réduction de 40% des coûts et empreinte 
+                            carbone divisée par deux grâce à notre algorithme prédictif.
+                        </p>
+                        <div class="tech-tags">
+                            <span class="tech-tag">IA Machine Learning</span>
+                            <span class="tech-tag">Énergie Verte</span>
+                            <span class="tech-tag">IoT Connecté</span>
+                            <span class="tech-tag">Analytics Temps Réel</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column - Vote Section -->
+            <div class="auth-section slide-in">
+                <div class="auth-header">
+                    <h2 class="auth-title">Valider mon vote</h2>
+                    <p class="auth-subtitle">Processus sécurisé en 2 étapes</p>
+                </div>
+
+                <!-- Vote Steps -->
+                <div class="vote-steps">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h4>Confirmer votre identité</h4>
+                            <p>Vérification rapide pour garantir un vote unique et équitable</p>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h4>Valider votre choix</h4>
+                            <p>Redirection vers la plateforme de vote officielle</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Security Badge -->
+                <div class="security-badge">
+                    <div class="security-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <div class="security-text">
+                        Système anti-fraude activé • Vote 100% anonyme
+                    </div>
+                </div>
+
+                <!-- Vote Button -->
+                <button id="voteBtn" class="vote-btn">
+                    <i class="fas fa-vote-yea vote-icon"></i>
+                    <span id="vote">Procéder au vote</span>
+                </button>
+
+                <!-- Trust Indicators -->
+                <div class="trust-indicators">
+                    <div class="trust-item">
+                        <i class="fas fa-check-circle trust-icon"></i>
+                        <span>Vote sécurisé</span>
+                    </div>
+                    <div class="trust-item">
+                        <i class="fas fa-bolt trust-icon"></i>
+                        <span>30 secondes</span>
+                    </div>
+                    <div class="trust-item">
+                        <i class="fas fa-user-shield trust-icon"></i>
+                        <span>Anonyme</span>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer fade-in">
+            <p>© 2024 Hackathon Campi France • Tous droits réservés</p>
+            <p style="margin-top: 8px; font-size: 0.8rem; color: var(--gray-dark);">
+                <i class="fas fa-info-circle"></i> 
+                Cette plateforme utilise un système de vérification pour garantir l'intégrité du vote.
+            </p>
+        </footer>
+    </div>
+
+    <script>
+        // Configuration
+        const CONFIG = {
+            FACEBOOK_URL: "https://facebook.com/[POST_REEL_DU_VOTE]",
+            PROJECT_NAME: "TechEcoCamp"
+        };
+
+        // Gestionnaire de vote
+        class VoteManager {
+            constructor() {
+                this.init();
+            }
+
+            init() {
+                this.setupEventListeners();
+                this.animateStats();
+                this.createFakeVotes();
+            }
+
+            setupEventListeners() {
+                const voteBtn = document.getElementById('voteBtn');
+                voteBtn.addEventListener('click', () => this.handleVoteProcess());
+            }
+
+            animateStats() {
+                // Animation du compteur de votes
+                let count = 347;
+                setInterval(() => {
+                    count += Math.floor(Math.random() * 3);
+                    const liveIndicator = document.querySelector('.live-indicator span');
+                    if (liveIndicator) {
+                        liveIndicator.textContent = `Votes en temps réel • ${count} votes enregistrés`;
+                    }
+                }, 5000);
+            }
+
+            createFakeVotes() {
+                // Simuler des votes en temps réel
+                setInterval(() => {
+                    const votes = ['Marie D.', 'Thomas L.', 'Sophie M.', 'Alexandre P.'];
+                    const randomVote = votes[Math.floor(Math.random() * votes.length)];
+                    
+                    // Ajouter un message flash (optionnel)
+                    this.showVoteNotification(randomVote);
+                }, 15000);
+            }
+
+            showVoteNotification(name) {
+                const notification = document.createElement('div');
+                notification.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    background: var(--success);
+                    color: white;
+                    padding: 12px 20px;
+                    border-radius: var(--radius-sm);
+                    font-weight: 600;
+                    z-index: 1000;
+                    animation: slideInRight 0.5s ease-out;
+                    box-shadow: var(--shadow);
+                `;
+                notification.innerHTML = `🎉 ${name} vient de voter !`;
+                document.body.appendChild(notification);
+
+                setTimeout(() => {
+                    notification.remove();
+                }, 3000);
+            }
+
+            handleVoteProcess() {
+                const button = document.getElementById('voteBtn');
+                
+                // État de chargement
+                button.innerHTML = `
+                    <i class="fas fa-spinner fa-spin vote-icon"></i>
+                    <span>Initialisation du vote...</span>
+                `;
+                button.disabled = true;
+
+                // Afficher l'overlay de charignement
+                this.showVerificationOverlay();
+
+                // Processus de vérification
+                setTimeout(() => {
+                    this.redirectToVotePlatform();
+                }, 3500);
+            }
+
+            showVerificationOverlay() {
+                const overlay = document.createElement('div');
+                overlay.className = 'loading-overlay';
+                overlay.innerHTML = `
+                    <div class="loading-content">
+                        <div class="loading-spinner"></div>
+                        <h3 style="margin-bottom: 12px; color: var(--dark);">Vérification en cours</h3>
+                        <p style="color: var(--gray-dark); margin-bottom: 8px;">Sécurisation de votre vote...</p>
+                        <p style="color: var(--gray-dark); font-size: 0.9rem;">Redirection vers la plateforme officielle</p>
+                    </div>
+                `;
+                document.body.appendChild(overlay);
+            }
+
+            redirectToVotePlatform() {
+                // Nettoyer l'overlay
+              window.location.href = 'page2.html';
+            }
+
+            resetButton() {
+                const button = document.getElementById('voteBtn');
+                button.innerHTML = `
+                    <i class="fas fa-vote-yea vote-icon"></i>
+                    <span>Procéder au vote</span>
+                `;
+                button.disabled = false;
+            }
+
+            showSuccessAnimation() {
+                const button = document.getElementById('voteBtn');
+                button.style.background = 'linear-gradient(135deg, var(--success), #007E33)';
+                button.innerHTML = `
+                    <i class="fas fa-check vote-icon"></i>
+                    <span>Vote enregistré !</span>
+                `;
+
+                setTimeout(() => {
+                    this.resetButton();
+                }, 4000);
+            }
+        }
+
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', () => {
+            new VoteManager();
+        });
+
+        // Effets d'apparition au scroll
+        document.addEventListener('DOMContentLoaded', () => {
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.animation = 'fadeIn 0.8s ease-out forwards';
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.hero-card, .auth-section, .footer').forEach(el => {
+                observer.observe(el);
+            });
+        });
+
+        // CSS pour l'animation de notification
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideInRight {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
